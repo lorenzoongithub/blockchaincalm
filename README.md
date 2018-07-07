@@ -6,6 +6,8 @@ blockchaincalm is a web app to experiment with Blockchain technology.
 
 if you don't like being told things as much as you like coming to the conclusion yourself then [play with blockchaincalm](https://lorenzoongithub.github.io/blockchaincalm/)
 
+<img src='blockchaincalm.png' alt='blockchain calm in action]' />
+
 ## Issues
 
 Report any issue (and any suggestion) using GitHub and use notifications to track progress on them.
