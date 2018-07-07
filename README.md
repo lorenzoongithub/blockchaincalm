@@ -2,9 +2,9 @@
 
 # [blockchaincalm](https://lorenzoongithub.github.io/blockchaincalm/) 
 
-blockchaincalm is a web app to experiment with Blockchain technology.
+blockchaincalm is a web app for experimenting with Blockchain technology from your computer/laptop (no great support for mobile devices).
 
-if you don't like being told things as much as you like coming to the conclusion yourself then [play with blockchaincalm](https://lorenzoongithub.github.io/blockchaincalm/)
+It runs on any modern browser (Chrome, Firefox, IE edge).
 
 <img src='blockchaincalm.png' alt='blockchain calm in action]' />
 
