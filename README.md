@@ -1,6 +1,10 @@
-# blockchaincalm
-a blockchain playground
+#### Don't just know the blockchain, feel it.
 
+# [blockchaincalm](https://lorenzoongithub.github.io/blockchaincalm/) 
+
+blockchaincalm is a web app to experiment with Blockchain technology.
+
+if you don't like being told things as much as you like coming to the conclusion yourself then play with blockchain calm
 
 ## Overview
 
