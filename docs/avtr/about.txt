@@ -1,0 +1,3 @@
+The avatars below are taken from tabler.
+See: https://github.com/tabler/tabler/tree/dev/dist/demo/faces
+ 

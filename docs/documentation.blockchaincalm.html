@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Blockchain Calm Documentation</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">  
+<link rel="stylesheet" href='milligram.css' /> 
+<link rel='shortcut icon' href='favicon.ico' /> 
+<style>
+body {
+  margin: 0;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #495057;
+  text-align: left;
+  background-color: #f5f7fb;
+}
+
+
+#divTopHeader {
+  position:fixed;
+  top:  0;
+  left: 0;
+  right:0; 
+  height:64px;
+  line-height:64px;
+  background-color:#fff;
+  border-bottom:1px solid #ddd;
+  padding:0 16px; 
+}
+
+#divContent {
+  position:fixed;
+  top: 80px;
+  left: 16px;
+  right:16px;
+  bottom:16px;
+  background-color:#fff;
+  outline:1px solid #ddd;
+  min-height:150px;
+  overflow: auto;
+  padding:0 3px;
+}
+
+
+</style>
+</head>
+<body>
+
+<div id='divTopHeader'><div style='font-size:24px;'><a href='index.html'>blockchain<b>calm</b></a></div></div>
+<div id='divContent'>
+
+<h2>Welcome</h2>
+Welcome to blockchain calm, a web app to interact with blockchains
+<p>
+
+<h2>Get Started</h2>
+
+Start with something simple. A network with 3 or 4 nodes should be enough to show how a blockchain works.
+<p>
+<img style='display:block;margin:20px;'src='documentation.graph.4.peers.png' />
+<p>
+Later on you can try to add more peers as well as deleting others.
+The tool lets you choose the maximum number of collections allowed for every peer. So, with a bit of practice,
+you will be able to build any topology you wish for your peer network. 
+<p>
+When you publish a block (e.g.: Alice sends 100 to Bob) keep an eye on the screen to see how transactions get added in a blockchain 
+and how the chain is propagated through the network 
+
+
+
+<h2>The Peer Network</h2>
+
+<ul>
+<li>A peer <img src='documentation.peer.43x43.png' /> represents a machine running the software that maintains the ever growing list of records (the blockchain)</li>
+<li>Each peer has a unique identifier (3 letter in our case) just like any computer on the Internet has an IP Address</li>
+<li>Peer-to-peer connections are shown through lines (edges of the graph)</li>
+<li>You can choose the maximum number of connections for any given peer <code title='On a BitCoin client you might have around 200 connections'>(2,3,5,8)</code></li>
+<li>You can terminate a peer at any time</li>
+<li>You can create a new peer at any time</li>
+<li>Nodes connect to other nodes randomly</li>
+<li>You can see the blockchain of any peer at any time</li>
+<li>The number in brackets on a peer tells you the length of its blockchain e.g.:<code>QXS(4)</code></li> 
+</ul>
+
+
+<h2>Publishing a record</h2>
+
+
+<ul>
+<li>You hit the <img src='send.64x64.png' /> broadcast to publish a random transaction (e.g Joe sends Alice 200) to a random peer.</li>
+<li>For sake of simplicity, a block contains one transaction only*</li> <!-- *A simplification for sake of clarity In a real blockchain a block might be made up of an array of transactions. -->
+<li>First hit always sends the genesis block (in our case Joe receives 1000)</li>
+<li>You can send several transactions in one go (by hitting the button repeatedly) and observe different scenarios:
+<ul>
+<li>Transaction might be rejected because the sender has not enough available money.</li>
+<li>Peers might build different chains and the consensus algorithm will dictate which chain lasts</li>
+</ul>
+</li>
+</ul>
+
+  
+<h2>The blockchain</h2>
+
+<ul>
+<li>Every peer maintains its list of blocks: the blockchain</li>
+<li>The ledger is derived by traversing the blockchain.</li>
+<li>A transaction is made like this <code>{ sender: 'Joe', inputIndexes: [3,7], amount:100, receiver: { Alice:60,Joe:40 } }</code></li>
+<li>The array of input-indexes refer to indexes in the blockchain to prove the availability of unspent transactions</li>
+<li>If Joe wants to send Alice 60 and he is referring to unspent transactions for a total of 100 he needs to also send himself 40</li>
+<li>Transactions might be rejected due to lack of money from the sender (if you are lucky you might witness the double-spending problem in action)</li>
+</ul>
+
+
+
+</div>
+
+
+</body>

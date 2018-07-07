@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Blockchain Calm</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">  
+<link rel="stylesheet" href='milligram.css' > 
+<link rel='shortcut icon' href='favicon.ico' />	
+<style>
+body {
+  margin: 0;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #495057;
+  text-align: left;
+  background-color: #f5f7fb;
+}
+
+#divTopHeader {
+  position:fixed;
+  top:  0;
+  left: 0;
+  right:0; 
+  height:64px;
+  line-height:64px;
+  background-color:#fff;
+  border-bottom:1px solid #ddd;
+  padding:0 16px; 
+}
+
+#divGraph {
+  position:fixed;
+  top: 80px;
+  left: 16px;
+  width:calc(70% - 48px);
+  bottom:30%;
+  background-color:#fff;
+  outline:1px solid #ddd;
+  min-height:150px;
+  overflow: hidden;
+}
+
+#divNodeList {
+  position:fixed;
+  top: 128px;
+  right: 16px;
+  width: 30%;
+  bottom: calc(30%);
+  xbottom:calc(30% + 96px); 
+  background-color:#fff;
+  outline:1px solid #ddd;
+}
+
+#divSeeDocs {
+  position:fixed;
+  top: 80px;
+  right: 16px;
+  width: 30%;
+  height: 32px;
+  background-color:#eef;
+  outline:1px solid #ddd;
+  overflow:hidden;
+  padding:0 3px;line-height:32px;text-align:center;
+}
+
+#divLog {
+  position:Fixed;
+  bottom:16px;
+  left:16px;
+  right:16px; 
+  height:calc(30% - 32px);
+  background-color:#fff;
+  outline:1px solid #ddd;
+}
+
+.clzCore {
+  position:absolute;
+  top:50px;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:0 3px;
+  overflow:auto;
+}
+
+.clzTitle {
+  font-size:18px;
+  height:50px;
+  line-height:50px;
+  border-bottom:1px solid #ddd;
+  overflow:hidden;
+  padding:0 3px;
+}
+
+.clzTinyButton {
+  text-align:center;
+  font-weight:normal;
+  width:16px;
+  height:16px; 
+  line-height:10px;
+  padding:0;
+  margin:0;
+  border:1px solid #fff;
+  border-radius:0;
+}
+
+.clzSpanBlockChainShortDesc {
+  word-wrap: break-word
+}
+
+.clzSpanConnectionList {
+  margin:0 3px;
+  font-size: 9px;
+  font-weight: bold; 
+}
+
+ 
+.clzAvatar {
+  width:32px;height:32px;border-radius:50%;
+  vertical-align:middle;
+  cursor:pointer;
+  margin:2px;
+}
+
+.clzLedger {
+  position:absolute;top:16px;right:16px;width:140px;xbottom:16px;outline:1px solid #ddd;overflow:hidden;background-color:#fff;
+}
+
+.clzBlockchain {
+  position:absolute;top:16px;left:16px; right:172px;bottom:16px;outline:1px solid #ddd;overflow:auto;background-color:#fff;
+}
+
+
+
+/** required by the log panel (which uses a <table>) **/
+th, td {
+  padding:0;
+}
+
+/** required to show point for links without href **/
+a:hover {
+ cursor:pointer;
+}
+
+
+/**
+ media queries are used to make disappear components if the page gets small  
+**/
+
+@media screen and (max-width: 820px) {
+    .clzDitchableText { display: none; }
+}
+
+@media screen and (max-height:400px) {
+  #divLog       { display:none; }
+  #divNodeList  { display:none; }
+}
+
+
+svg  { width: 100%; height: 100%; font-size:11px;}
+
+.clzNodeInfo {
+  border-bottom : 1px solid #ddd;
+} 
+</style>
+</head>
+<body>
+<div id='divTopHeader'><div style='font-size:24px;'><a href='index.html'>blockchain<b>calm</b></a></div></div>
+
+<div id='divGraph'>
+  <div class='clzTitle'>Peer Network</div>
+  <!-- #258 #37B #49D' #5BF -->
+  <div style='position:absolute;left:3px;'> Create a node<br><!-- 
+   --><button style='background-color:#258;margin-right:1px;' class='clzTinyButton' title='create a peer with max connections = 2' onclick='newPeer(2)'>2</button><!-- 
+   --><button style='background-color:#37B;margin-right:1px;' class='clzTinyButton' title='create a peer with max connections = 3' onclick='newPeer(3)'>3</button><!-- 
+   --><button style='background-color:#49D;margin-right:1px;' class='clzTinyButton' title='create a peer with max connections = 5' onclick='newPeer(5)'>5</button><!-- 
+   --><button style='background-color:#5BF;'                  class='clzTinyButton' title='create a peer with max connections = 8' onclick='newPeer(8)'>8</button>
+  </div>
+  <div id='divNodeCount' title='number of live peers' style='position:absolute;right:3px;font-weight:bold;'></div>
+  <div style='position:absolute;right:3px;bottom:3px;'>
+  <button style='display:block;margin-bottom:1px;' class='clzTinyButton' title='zoom in'  onclick='renderer.zoomIn()' >+</button>
+  <button style='display:block;'                   class='clzTinyButton' title='zoom out' onclick='renderer.zoomOut()'>-</button>
+  </div>
+  <div style='position:absolute;left:3px;bottom:3px;width:64px;height:64px;'>
+  <input type='image' value='send' title='publish a message' onclick='publishMessage()' src='send.64x64.png'/>
+  </div>
+</div>
+
+<div id='divSeeDocs'>
+  <span class='clzDitchableText' >Need help ? Read the</span> <a href='documentation.blockchaincalm.html'>Documentation</a>
+</div>
+
+<div id='divNodeList'>
+  <div class='clzTitle'>Blockchain Explorer</div>
+  <div id='divInfoOnNodes' class='clzCore'></div>
+</div>
+
+<div id='divLog'>
+  <div class='clzTitle'>Log
+  <input style='float:right;margin:1px;' type='image' title='clear the logs' onclick='document.getElementById("tbodyLog").innerHTML=""' src='recycle.bin.16x16.jpg'/>
+  <input id='txtLogFilter' placeholder='filter' style='margin-right:16px;float:right;width:100px;padding:0;cursor:pointer;height:16px;border:0;border-bottom:1px solid #999;border-radius:0;xbackground-color:#fed;font-size:15px;' 
+  maxLength=8 type='search' />
+  </div>
+  <div class='clzCore'>
+    <table>
+      <thead>
+        <tr><th>Time</th><th>Level</th><th>Source</th><th>Message</th></tr>
+      </thead>
+        <tbody id='tbodyLog'></tbody>
+    </table>
+  </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vivagraphjs/0.10.1/vivagraph.min.js'></script>
+<script>window.Viva || document.write('<script src="ext/vivagraph.js.0.10.1/vivagraph.min.js"><\/script>');</script>
+<script src='modal.js'></script>
+<script src='blockchain.utils.js'></script>
+<script>
+
+//
+// Unique id generator for the blocks/transactions.
+//
+var IDGenerator = (function () {
+    var count = 0; 
+    return { 
+    	next : function() { return count++; }
+    };
+})();
+
+//
+// the list of all of the nodes/peers.
+//
+var nodes = [];
+
+// Independent loopy function to keep a count of the nodes (~ every half second)
+(function loopy() {
+	if (loopy.len != nodes.length) {
+		divNodeCount.innerHTML = nodes.length;
+  }
+	loopy.len = nodes.length;
+	setTimeout(loopy,500);	
+}());
+
+
+function findRandomNode() {
+	var x = Math.floor(Math.random()*nodes.length)
+	return nodes[x]; 
+}
+
+function findNodeById(id) {
+	for (var i=0;i<nodes.length;i++) {
+		if (nodes[i].id == id ) {
+			return nodes[i];
+		}
+	}
+	return null; 
+}
+
+var graph =    Viva.Graph.graph();
+var graphics = Viva.Graph.View.svgGraphics();
+
+// Map from a nodeId to a function repaint(blockChainLength) { ... }
+var id2repaintNode = {};
+
+graphics.node(function(node) {
+    var ui = Viva.Graph.svg('g');
+    ui.style.cursor='pointer';
+    var svgText = Viva.Graph.svg('text').attr('y', '-4px').text(node.id);
+    var img = Viva.Graph.svg('rect')
+    img.attr('stroke','#333');
+    img.attr('fill', node.data == null ? 'red' : node.data.maxConnections == '2' ? '#258' : 
+                                                 node.data.maxConnections == '3' ? '#37B' :
+                                                 node.data.maxConnections == '5' ? '#49D' : '#5BF' )   
+    img.attr('width',  16)
+    img.attr('height', 16);
+    ui.append(svgText);
+    ui.append(img);
+    
+    id2repaintNode[node.id] = function(size) {
+    	svgText.innerHTML= size == 0 ? node.id : node.id+' ('+size+')'; 
+    }
+    
+    ui.onclick = function(e) {
+    	e.stopPropagation();
+    	// highlights the div related to this node. (experimental feature)
+    	var div = document.getElementById('div-'+node.id);
+    	div.scrollIntoView();
+    	div.style.backgroundColor = '#eee';
+    	setTimeout(function() {
+    		div.style.backgroundColor = '';
+    	},500);
+    }
+	return ui;
+  }).placeNode(function(nodeUI, pos) {
+      // The constant '8' is half the width (16/2) 
+      nodeUI.attr('transform', 'translate(' + (pos.x - 8) + ',' + (pos.y - 8) + ')');
+  }
+);
+
+var renderer = Viva.Graph.View.renderer(graph, {
+  container: document.getElementById('divGraph'),
+  graphics : graphics
+});
+renderer.run();
+
+var createUniqueId = (function() {
+	var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
+	var all = {}; // A map to store previously created ids 
+	return function() {
+		while (true) {
+			var uid = alphabet.charAt(Math.floor(Math.random()*26))+
+			          alphabet.charAt(Math.floor(Math.random()*26))+
+			          alphabet.charAt(Math.floor(Math.random()*26));
+			          //Math.floor(2 + Math.random()*8)+  // We exclude 0 and 1 for better readability
+			          //Math.floor(2 + Math.random()*8);
+			if (all[uid] === 1) continue; 
+			all[uid] = 1;
+			return uid;
+		} 
+	}
+})(); 
+
+
+
+function newPeer(maxConnections) {
+	var id = createUniqueId();
+	var connections = []; 
+	var status = 'active'; 
+	
+	var div = document.createElement('div');
+	div.id = 'div-'+id; // used to be referenced by node click
+	div.className ='clzNodeInfo';
+	
+	var btnClose = document.createElement('button');
+	btnClose.title = 'Terminate '+id;
+	btnClose.className = 'clzTinyButton';
+	btnClose.style.float = 'right';
+	btnClose.style.margin = '1px';
+	btnClose.innerHTML = '&times;';
+	btnClose.onclick = function() {
+		var ix; 
+		for (var i=0;i<nodes.length;i++) {
+			if (nodes[i].id == id) {
+				ix = i;
+			}
+			var cons = nodes[i].connections;
+			for (var j=0;j<cons.length;j++) {
+				if (cons[j] == id) {
+					cons.splice(j,1);
+					break;
+				}
+			}
+		}
+		nodes.splice(ix,1);
+		graph.removeNode(id);
+		status = 'destroy';
+		div.parentNode.removeChild(div);
+		delete id2repaintNode[id];
+		log(id,'INFO',id+' is logging off');
+	};
+	div.appendChild(btnClose); 
+	
+	var divAboutNode = document.createElement('div');
+	div.appendChild(divAboutNode); 
+	divAboutNode.innerHTML = id;
+	var spanConnectionList = document.createElement('span');
+	spanConnectionList.className = 'clzSpanConnectionList';
+	divAboutNode.appendChild(spanConnectionList)
+	divAboutNode.appendChild(document.createElement('br'));
+	
+  var a = document.createElement('a');
+  a.innerHTML = 'Blockchain ';
+  a.onclick = function() {
+	        var tableChain = document.createElement('table');
+	        var tbodyChain = document.createElement('tbody');
+	        tableChain.innerHTML = '<thead><tr><th>Index</th><th>UniqueID</th><th>Timestamp</th><th>Input</th><th>BackReferences</th><th>Outputs</th></tr></thead>';
+	        tableChain.appendChild(tbodyChain);
+	        var divBC = document.createElement('div');
+	        divBC.className='clzBlockchain';
+	        
+	        var divTitle = document.createElement('div');
+	        divTitle.className = 'clzTitle';
+	        divTitle.innerHTML = 'Blockchain <b>'+id+'</b>'
+	          
+	        divBC.appendChild(divTitle); 
+	        divBC.appendChild(tableChain);
+	        
+	        var tableLedger = document.createElement('table');
+	        var tbodyLedger = document.createElement('tbody');
+	        var divLedger = document.createElement('div');
+	        divLedger.className = 'clzLedger';
+	        tableLedger.innerHTML = '<thead><tr title="The ledger is constantly recalculated\nby traversing the whole blockchain"><th colSpan="3">Ledger</th></tr></thead>'
+	        tableLedger.appendChild(tbodyLedger);
+	        divLedger.appendChild(tableLedger);
+	        
+	        var divCore = document.createElement('div');
+	        divCore.style.backgroundColor = '#f5f7fb';
+	        divCore.appendChild(divBC);
+	        divCore.appendChild(divLedger);
+
+	        modal.show(divCore);
+	        (function loopy() {
+	          if (modal.isShowing() == false) {
+	            console.log('stopping loopy');
+	            return; 
+	          }
+	          var chain = node.blockchain; 
+	          var s='';
+	          for (var i=chain.length-1;i>=0;i--) {
+	            var tr = chain[i];
+	            var sender = tr.sender;
+	            var receiver; 
+	            for (var j in tr.outputs) {
+	              if (j != sender) {
+	                receiver = j;
+	                break;
+	              }
+	            }
+	            var amount = tr.outputs[receiver];
+	            var narrative = sender +' gives '+receiver+' '+amount; 
+	            if (tr.outputs[sender] == undefined) narrative+='\n';
+	            else                                 narrative+=' and keeps '+tr.outputs[sender]+'\n'
+	            if (tr.inputs.length == 1) {
+	              var ix =       tr.inputs[0];
+	              var ixSender = chain[ix].sender
+	              var ixAmount = chain[ix].outputs[sender]
+	              narrative+= 'using one unspent transaction at '+tr.inputs[0]+' (from '+chain[tr.inputs[0]].sender+' worth '+chain[tr.inputs[0]].outputs[sender]+' )';
+	            } else {
+	              var total = 0;
+	              for (var j=0;j<tr.inputs.length;j++) total += chain[tr.inputs[j]].outputs[sender];
+	              narrative+= 'using '+tr.inputs.length+' unspent transactions at '+tr.inputs.join(',')+' (totalling to '+total+' )';
+	            }
+	            var outputs = [];
+	            for (var j in tr.outputs) {
+	              outputs.push(j+':'+tr.outputs[j]);
+	            }
+	            
+	            if (sender == 'Genesis') {
+	              s+= '<tr style="color:red" title="'+narrative+'"><td>'+
+	                   i+'</td><td>'+
+	                   tr.id+'</td><td>'+
+	                   tr.timestamp+'</td><td>'+
+	                   tr.sender+'</td><td>'+
+	                   tr.inputs.join(',')+'</td><td>'+
+	                   outputs.join('<br>')+
+	                   '</td></tr>';
+	            } else {
+	              s+= '<tr title="'+narrative+'"><td>'+
+	                   i+'</td><td>'+
+	                   tr.id+'</td><td>'+
+	                   tr.timestamp+'</td><td>'+
+	                   tr.sender+'</td><td>'+
+	                   tr.inputs.join(',')+'</td><td>'+
+	                   outputs.join('<br>')+
+	                   '</td></tr>';  
+	            }
+	          }
+	          tbodyChain.innerHTML=s;
+	          
+	          var ledger = calculateLedger(node.blockchain);
+	          var users = Object.keys(ledger).sort(); // <-- polyfill required ???
+	          var s =''
+	          for (var i=0;i<users.length;i++) {
+	            if (users[i] == 'Genesis') continue; 
+	            s+='<tr><td style="width:40px"><img class="clzAvatar" src="avtr/'+users[i]+'.jpg"/></td><td>'+users[i]+'</td><td>'+ledger[users[i]]+'&euro;</td></tr>';  
+	          }
+	          tbodyLedger.innerHTML = s;
+	          
+	          setTimeout(loopy, 1000); 
+	        })(); 
+	};
+	
+	var spanBlockChainShortDesc = document.createElement('span');
+	spanBlockChainShortDesc.className = 'clzSpanBlockChainShortDesc'
+  divAboutNode.appendChild(a);
+  divAboutNode.appendChild(spanBlockChainShortDesc);
+
+	
+	var node = {
+		id : id,
+		connections : connections,
+		status : status,
+		maxConnections : maxConnections,
+		chain : [],
+		blockchain : []
+	}
+	nodes.push(node); 
+	
+
+
+	setTimeout(function loopy() {
+		if (status == 'destroy') return; // ends the loop.
+
+		spanConnectionList.innerHTML = connections.join(', ');
+	  spanBlockChainShortDesc.innerHTML= toShortString(node.blockchain);
+		id2repaintNode[node.id](node.blockchain.length); 
+
+		if (connections.length < maxConnections) {
+	   	var x = findRandomNode();
+			if (x != null &&                                 // if I find something
+		   		x.id != id &&                                // but not myself
+				  x.connections.length < x.maxConnections &&   // and if I have capacity
+				  connections.indexOf(x.id) == -1) {           // and if I am not already connected to it 
+		  		
+				  connections.push(x.id);
+		      x.connections.push(id); 
+			    graph.addLink(x.id,id);
+			    log(id,  'INFO','connection established with '+x.id);
+			}
+	  }
+	    
+	  for (var i=0;i<connections.length;i++) {
+	    	var cNode = findNodeById(connections[i]);
+	    	var v = compareChainCosts(node.blockchain, cNode.blockchain);
+	    	if (v == -1) {
+	    		log(id, 'INFO', 'updating blockchain from '+cNode.id); // shall I log the size of the delta (number of transactions to re-evaluate)
+	    		delta = deltaChain(node.blockchain, cNode.blockchain);
+	        node.blockchain = cNode.blockchain.slice();
+	    		for (var j=0;j<delta.length;j++) {
+	    			var tz = transactionFromBlock(delta[j]);
+	    			var err = addBlock(node.blockchain, tz.id, tz.sender, tz.amount, tz.receiver); // reading any unprocessed transaction.
+	    			if (err) {
+	    				log(id, 'WARN', err);
+	    			}
+	    		}
+	    	}
+	  }
+	    
+	  setTimeout(loopy, 1000); // This speed could be different per node. (A customizable parameter, maybe.)
+	} ,1000);
+	
+	graph.addNode(id, {maxConnections:maxConnections})
+	document.getElementById('divInfoOnNodes').appendChild(div);
+	log(id,'INFO', 'created new peer' );
+}
+
+function publishMessage() {
+	var node = findRandomNode();
+	if (node == null) {
+		// Here only if there is not even a node in the network.
+		log('<I>PUBLISHER</I>','ERROR', 'could not find any peer');
+		return;
+	}
+	var idBlock = IDGenerator.next();
+		
+	if (idBlock == 0) {
+		// the first publish creates the bootstrap node. 
+	  addBlock(node.blockchain, idBlock, 'Genesis', 1000, 'Joe');
+	  log('📣','INFO', 'publishing on '+node.id+' [ (0) Genesis gives 1000 to Joe]');
+	  log(node.id, 'INFO' , 'received Genesis block [0]');
+	} else if (node.blockchain.length == 0) {
+		log(node.id, 'WARN' , 'rejecting '+idBlock+' (blockchain has not been bootstrapped).');
+	} else {
+		var b = createRandomBlock(node.blockchain, ["Beverly", "Joe", "Alice", "Ronald", "Ling", "Arvind", "Greta", "Freddie", "Jane", "Diego"]);
+		log('📣','INFO', 'publishing on '+node.id+' [ ('+idBlock+') '+b.sender+' gives '+b.amount+' to '+b.receiver+']');
+		var err = addBlock(node.blockchain, idBlock, b.sender , b.amount, b.receiver);
+		if (err) {
+			log(node.id, 'WARN', err);
+			return;
+		}
+		log(node.id, 'INFO' , 'received message ['+idBlock+']');
+  } 
+}
+
+(function() {
+	var tbodyLog = document.getElementById('tbodyLog'); 
+	
+	window.log = function(source, level, message) {
+		var tr = document.createElement('tr'); 
+		if (level == 'ERROR') tr.style.color = 'red';
+		if (level == 'WARN') tr.style.color = 'orange';
+		
+    var timestamp = (function toHHMMSS() {
+        var d = new Date();
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var s = d.getSeconds();
+        return ((h < 10) ? '0'+h : h) + ':' + ((m < 10) ? '0'+m : m) + ':' + ((s < 10) ? '0'+s : s);
+    })(); 
+		
+		var s = '';
+		s+='<td>'+timestamp+'</td>';
+		s+='<td>'+level+'</td>';
+		s+='<td>.'+source+'</td>';
+	  s+='<td>'+message+'</td>';
+		tr.innerHTML = s;
+		// logic to decide whether to filter it out:	tr.style.display = 'none';
+	  tbodyLog.appendChild(tr);
+	  var v = txtLogFilter.value.toUpperCase().trim(); 
+		if (v != '' && s.indexOf(v) == -1) {
+			tr.style.display = 'none';
+		} else { 
+		  tr.scrollIntoView();
+		}
+	}
+
+    
+	var txtLogFilter =   document.getElementById('txtLogFilter');
+	txtLogFilter.onkeyup = txtLogFilter.onsearch = function() {
+		var v = txtLogFilter.value.toUpperCase().trim(); 
+		var children = tbodyLog.children;
+		var lastVisibleTR; 
+		for (var i=0;i<children.length;i++) {
+			if (v == '' || children[i].innerHTML.indexOf(v) != -1) {
+				children[i].style.display = ''; 	
+				lastVisibleTR = children[i];
+			} else {
+				children[i].style.display = 'none';
+			}
+		}
+		if (lastVisibleTR) lastVisibleTR.scrollIntoView(); 
+	}
+})(); 
+
+
+// bootstrapping the network.
+newPeer(2);
+newPeer(5);
+</script>
+
+<!-- fork me on github -->
+<a href="https://github.com/lorenzoongithub/blockchaincalm"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0; width:60px;height:60px;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+ 
+</body>
+</html>
